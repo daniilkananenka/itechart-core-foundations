@@ -1,0 +1,14 @@
+{
+  "name": "color-matching-game",
+  "author": {
+    "name": "Kananenka Daniil",
+    "url": "https://github.com/daniilkananenka"
+  },
+  "scripts": {
+    "format:check": "prettier . --check",
+    "format:write": "prettier . --write"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}
