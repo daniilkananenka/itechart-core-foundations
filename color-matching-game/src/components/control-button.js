@@ -1,22 +1,22 @@
 const { EVENTS, eventEmitter } = require('../utils/event-emitter')
 
 class ControlButtonComponent {
-  ui
+  #ui
 
   constructor() {
-    this.ui = document.getElementById('control-button')
+    this.#ui = document.getElementById('control-button')
 
-    eventEmitter.addHandler(EVENTS.INITIALIZE, this.handleInitialize)
-    eventEmitter.addHandler(EVENTS.START_GAME, this.handleStartGame)
-    eventEmitter.addHandler(EVENTS.STOP_GAME, this.handleStopGame)
+    eventEmitter.addHandler(EVENTS.APP_INITIALIZED, this.handleInitialize)
+    eventEmitter.addHandler(EVENTS.GAME_STARTED, this.handleStartGame)
+    eventEmitter.addHandler(EVENTS.GAME_STOPED, this.handleStopGame)
   }
 
   handleInitialize() {
-    this.ui.addEventListener('click', () => {
+    this.#ui.addEventListener('click', () => {
       // Add condition of game state
-      eventEmitter.emit(EVENTS.START_GAME)
+      eventEmitter.emit(EVENTS.GAME_STARTED)
 
-      eventEmitter.emit(EVENTS.STOP_GAME)
+      eventEmitter.emit(EVENTS.GAME_STOPED)
     })
   }
 
@@ -29,6 +29,8 @@ class ControlButtonComponent {
   }
 
   #setInnerText(text) {
-    this.ui.innerText(text)
+    this.#ui.innerText(text)
   }
 }
+
+module.exports = { ControlButtonComponent }
