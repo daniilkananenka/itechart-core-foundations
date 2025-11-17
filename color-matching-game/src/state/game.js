@@ -1,8 +1,5 @@
 const { AVAILABLE_COLORS } = require('../constants/color');
-const {
-  TIMER_INTERVAL,
-  GAME_DURATION_SECONDS,
-} = require('../constants/game-config');
+const { GAME_CONFIG } = require('../constants/game-config');
 const { EVENTS, eventEmitter } = require('../utils/event-emitter');
 
 class GameState {
@@ -10,8 +7,11 @@ class GameState {
   #isGameStarted;
   #score;
   #timer;
+  #ratingManager;
 
-  constructor() {
+  constructor({ ratingManager }) {
+    this.#ratingManager = ratingManager;
+
     this.#question = AVAILABLE_COLORS[0];
     this.#isGameStarted = false;
     this.#score = 0;

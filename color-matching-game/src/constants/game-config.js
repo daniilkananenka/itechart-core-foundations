@@ -1,5 +1,6 @@
-const TIMER_INTERVAL = 1 * 1000
+const GAME_CONFIG = Object.freeze({
+  TIMER_UPDATE_INTERVAL: 1 * 1000,
+  GAME_DURATION_SECONDS: 10,
+});
 
-const GAME_DURATION_SECONDS = 10
-
-module.exports = { TIMER_INTERVAL, GAME_DURATION_SECONDS }
+module.exports = { GAME_CONFIG };
