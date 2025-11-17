@@ -1,5 +1,3 @@
-const { EVENTS, eventEmitter } = require('../utils/event-emitter');
-
 class RatingListComponent {
   #ui;
   #gameState;
@@ -13,15 +11,15 @@ class RatingListComponent {
     eventEmitter.addHandler(EVENTS.RATING_UPDATED, this.handleRatingUpdated);
   }
 
-  handleRatingUpdated() {
+  handleRatingUpdated = createComponentHandler(() => {
     this.#render(this.#gameState.score);
-  }
+  }, this);
 
   #render() {
     const rating = this.#gameState.rating;
 
     if (rating.length) {
-      this.#ui.rating.innerHTML = rating.reduce((html, currentValue, index) => {
+      this.#ui.innerHTML = rating.reduce((html, currentValue, index) => {
         return (
           html +
           `<div class="rating-list-item-block"><div>#${
@@ -30,9 +28,7 @@ class RatingListComponent {
         );
       }, '');
     } else {
-      this.#ui.rating.innerHTML = 'No results yet';
+      this.#ui.innerHTML = 'No results yet';
     }
   }
 }
-
-module.exports = { RatingListComponent };

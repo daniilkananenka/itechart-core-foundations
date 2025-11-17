@@ -1,7 +1,3 @@
-const { AVAILABLE_COLORS } = require('../constants/color');
-const { GAME_CONFIG } = require('../constants/game-config');
-const { EVENTS, eventEmitter } = require('../utils/event-emitter');
-
 class GameState {
   #question;
   #isGameStarted;
@@ -115,5 +111,3 @@ class GameState {
     eventEmitter.emit(EVENTS.QUESTION_UPDATED);
   }
 }
-
-module.exports = { GameState };

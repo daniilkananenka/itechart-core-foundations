@@ -1,6 +1,3 @@
-const { EVENTS, eventEmitter } = require('../utils/event-emitter');
-const { COLORS_CONFIG, AVAILABLE_COLORS } = require('../constants/color');
-
 class ColorButtonsComponent {
   #ui;
   #gameState;
@@ -30,13 +27,13 @@ class ColorButtonsComponent {
     eventEmitter.addHandler(EVENTS.GAME_STOPED, this.handleGameStoped);
   }
 
-  handleGameStarted() {
+  handleGameStarted = createComponentHandler(() => {
     this.#enable();
-  }
+  }, this);
 
-  handleGameStoped() {
+  handleGameStoped = createComponentHandler(() => {
     this.#disable();
-  }
+  }, this);
 
   #setColors(colors) {
     this.#ui.forEach((element, index) => {
@@ -59,5 +56,3 @@ class ColorButtonsComponent {
     });
   }
 }
-
-module.exports = { ColorButtonsComponent };

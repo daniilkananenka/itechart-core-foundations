@@ -1,5 +1,3 @@
-const { EVENTS, eventEmitter } = require('../utils/event-emitter');
-
 class ControlButtonComponent {
   #ui;
   #gameState;
@@ -22,17 +20,15 @@ class ControlButtonComponent {
     eventEmitter.addHandler(EVENTS.GAME_STOPED, this.handleGameStoped);
   }
 
-  handleGameStarted() {
+  handleGameStarted = createComponentHandler(() => {
     this.#setInnerText('Stop');
-  }
+  }, this);
 
-  handleGameStoped() {
+  handleGameStoped = createComponentHandler(() => {
     this.#setInnerText('Start');
-  }
+  }, this);
 
   #setInnerText(text) {
-    this.#ui.innerText(text);
+    this.#ui.innerText = text;
   }
 }
-
-module.exports = { ControlButtonComponent };

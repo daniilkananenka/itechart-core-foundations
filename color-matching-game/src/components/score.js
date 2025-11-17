@@ -1,5 +1,3 @@
-const { EVENTS, eventEmitter } = require('../utils/event-emitter');
-
 class ScoreComponent {
   #ui;
   #gameState;
@@ -13,13 +11,11 @@ class ScoreComponent {
     eventEmitter.addHandler(EVENTS.SCORE_UPDATED, this.handleScoreUpdated);
   }
 
-  handleScoreUpdated() {
+  handleScoreUpdated = createComponentHandler(() => {
     this.#setInnerText(this.#gameState.score);
-  }
+  }, this);
 
   #setInnerText(text) {
-    this.#ui.innerText(text);
+    this.#ui.innerText = text;
   }
 }
-
-module.exports = { ScoreComponent };

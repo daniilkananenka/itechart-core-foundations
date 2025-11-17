@@ -1,5 +1,3 @@
-const { EVENTS, eventEmitter } = require('../utils/event-emitter');
-
 class TimerComponent {
   #ui;
   #gameState;
@@ -13,13 +11,11 @@ class TimerComponent {
     eventEmitter.addHandler(EVENTS.TIMER_UPDATED, this.handleTimerUpdated);
   }
 
-  handleTimerUpdated() {
+  handleTimerUpdated = createComponentHandler(() => {
     this.#setInnerText(this.#gameState.remainingTime);
-  }
+  }, this);
 
   #setInnerText(text) {
-    this.#ui.innerText(text);
+    this.#ui.innerText = text;
   }
 }
-
-module.exports = { TimerComponent };

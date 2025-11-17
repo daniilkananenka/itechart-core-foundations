@@ -35,9 +35,12 @@ class EventEmitter {
    */
   emit(event) {
     if (!this.#exists(event)) {
-      throw new Error(`There are no handlers associated with ${event} event`);
+      return;
     }
-    this.eventHandlers[event];
+
+    this.eventHandlers[event].forEach((handler) => {
+      handler?.();
+    });
   }
 
   /**
@@ -66,5 +69,3 @@ const EVENTS = Object.freeze({
 });
 
 const eventEmitter = new EventEmitter();
-
-module.exports = { EVENTS, eventEmitter };

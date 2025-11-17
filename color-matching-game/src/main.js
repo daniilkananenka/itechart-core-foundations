@@ -1,12 +1,3 @@
-const { ColorButtonsComponent } = require('./components/color-buttons');
-const { ColorQuestionComponent } = require('./components/color-question');
-const { ControlButtonComponent } = require('./components/control-button');
-const { RatingListComponent } = require('./components/rating-list');
-const { ScoreComponent } = require('./components/score');
-const { TimerComponent } = require('./components/timer');
-const { GameState } = require('./state/game');
-const { RatingManager } = require('./utils/rating-manager');
-
 const ratingManager = new RatingManager();
 const gameState = new GameState({ ratingManager });
 

@@ -1,5 +1,3 @@
-const { EVENTS, eventEmitter } = require('../utils/event-emitter');
-
 class ColorQuestionComponent {
   #ui;
   #gameState;
@@ -16,13 +14,11 @@ class ColorQuestionComponent {
     );
   }
 
-  handleQuestionUpdated() {
+  handleQuestionUpdated = createComponentHandler(() => {
     this.#setInnerText(this.#gameState.question);
-  }
+  });
 
   #setInnerText(text) {
-    this.#ui.innerText(text);
+    this.#ui.innerText = text;
   }
 }
-
-module.exports = { ColorQuestionComponent };
