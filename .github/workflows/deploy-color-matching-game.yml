@@ -52,10 +52,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: |
-            ./color-matching-game/index.html
-            ./color-matching-game/public
-            ./color-matching-game/dist
+          path: dist/
 
       - name: Deploy to GitHub Pages
         id: deployment
