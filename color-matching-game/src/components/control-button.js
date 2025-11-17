@@ -7,7 +7,7 @@ class ControlButtonComponent {
   constructor({ gameState }) {
     this.#gameState = gameState;
 
-    this.#ui = document.getElementById('#control-button');
+    this.#ui = document.querySelector('#control-button');
 
     this.#ui.addEventListener('click', () => {
       if (!this.#gameState.isGameStarted) {

@@ -7,7 +7,7 @@ class TimerComponent {
   constructor({ gameState }) {
     this.#gameState = gameState;
 
-    this.#ui = document.getElementById('#timer-block');
+    this.#ui = document.querySelector('#timer-block');
     this.#setInnerText(this.#gameState.remainingTime);
 
     eventEmitter.addHandler(EVENTS.TIMER_UPDATED, this.handleTimerUpdated);

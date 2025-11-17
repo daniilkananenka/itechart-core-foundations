@@ -1,0 +1,63 @@
+const { EVENTS, eventEmitter } = require('../utils/event-emitter');
+const { COLORS_CONFIG, AVAILABLE_COLORS } = require('../constants/color');
+
+class ColorButtonsComponent {
+  #ui;
+  #gameState;
+
+  constructor({ gameState }) {
+    this.#gameState = gameState;
+
+    this.#ui = document.querySelectorAll('.color-selector-button');
+
+    this.#setColors(AVAILABLE_COLORS);
+    this.#disable();
+
+    this.#ui.forEach((element, index) => {
+      const color = AVAILABLE_COLORS[index];
+
+      element.style.backgroundColor = COLORS_CONFIG[color].background;
+      element.style.borderColor = COLORS_CONFIG[color].border;
+
+      element.addEventListener('click', () => {
+        if (!this.#gameState.isGameStarted) return;
+
+        this.#gameState.checkAnswer(AVAILABLE_COLORS[index]);
+      });
+    });
+
+    eventEmitter.addHandler(EVENTS.GAME_STARTED, this.handleGameStarted);
+    eventEmitter.addHandler(EVENTS.GAME_STOPED, this.handleGameStoped);
+  }
+
+  handleGameStarted() {
+    this.#enable();
+  }
+
+  handleGameStoped() {
+    this.#disable();
+  }
+
+  #setColors(colors) {
+    this.#ui.forEach((element, index) => {
+      const color = colors[index];
+
+      element.style.backgroundColor = COLORS_CONFIG[color].background;
+      element.style.borderColor = COLORS_CONFIG[color].border;
+    });
+  }
+
+  #disable() {
+    this.#ui.forEach((element) => {
+      element.disabled = true;
+    });
+  }
+
+  #enable() {
+    this.#ui.forEach((element) => {
+      element.disabled = false;
+    });
+  }
+}
+
+module.exports = { ColorButtonsComponent };

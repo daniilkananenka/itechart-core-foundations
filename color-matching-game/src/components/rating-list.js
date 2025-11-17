@@ -7,7 +7,7 @@ class RatingListComponent {
   constructor({ gameState }) {
     this.#gameState = gameState;
 
-    this.#ui = document.getElementById('#rating-list');
+    this.#ui = document.querySelector('#rating-list');
     this.#render();
 
     eventEmitter.addHandler(EVENTS.RATING_UPDATED, this.handleRatingUpdated);
