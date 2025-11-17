@@ -37,6 +37,10 @@ class GameState {
     return this.#timer.seconds;
   }
 
+  get rating() {
+    return this.#ratingManager.get();
+  }
+
   startGame() {
     this.#isGameStarted = true;
 
