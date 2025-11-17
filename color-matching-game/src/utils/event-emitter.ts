@@ -1,15 +1,12 @@
 class EventEmitter {
+  readonly eventHandlers: Record<string, Set<() => void>>;
+
   constructor() {
     this.eventHandlers = {};
   }
 
-  /**
-   * @param {string} event
-   * @param {() => void} handler
-   * @returns {void}
-   */
-  addHandler(event, handler) {
-    if (!this.#exists(event)) {
+  addHandler(event: string, handler: () => void) {
+    if (!this.exists(event)) {
       this.eventHandlers[event] = new Set([handler]);
       return;
     }
@@ -17,24 +14,15 @@ class EventEmitter {
     this.eventHandlers[event].add(handler);
   }
 
-  /**
-   * @param {string} event
-   * @param {() => void} handler
-   * @returns {void}
-   */
-  removeHandler(event, handler) {
-    if (!this.#exists(event)) {
+  removeHandler(event: string, handler: () => void) {
+    if (!this.exists(event)) {
       throw new Error(`There are no handlers associated with ${event} event`);
     }
     this.eventHandlers[event].delete(handler);
   }
 
-  /**
-   * @param {string} event
-   * @returns {void}
-   */
-  emit(event) {
-    if (!this.#exists(event)) {
+  emit(event: string) {
+    if (!this.exists(event)) {
       return;
     }
 
@@ -43,11 +31,7 @@ class EventEmitter {
     });
   }
 
-  /**
-   * @param {string} event
-   * @returns {boolean}
-   */
-  #exists(event) {
+  private exists(event: string) {
     return event in this.eventHandlers;
   }
 }

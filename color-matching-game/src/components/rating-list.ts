@@ -1,21 +1,22 @@
-import { createComponentHandler } from '../utils/component';
+import { GameState } from '../state/game';
+import { createComponentHandler, getElement } from '../utils/component';
 import { eventEmitter, EVENTS } from '../utils/event-emitter';
 
 class RatingListComponent {
-  #ui;
-  #gameState;
+  readonly #ui: HTMLDivElement;
+  readonly #gameState: GameState;
 
-  constructor({ gameState }) {
+  constructor({ gameState }: { gameState: GameState }) {
     this.#gameState = gameState;
+    this.#ui = getElement('#rating-list');
 
-    this.#ui = document.querySelector('#rating-list');
     this.#render();
 
     eventEmitter.addHandler(EVENTS.RATING_UPDATED, this.handleRatingUpdated);
   }
 
   handleRatingUpdated = createComponentHandler(() => {
-    this.#render(this.#gameState.score);
+    this.#render();
   }, this);
 
   #render() {

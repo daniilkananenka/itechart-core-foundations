@@ -1,22 +1,23 @@
 import { AVAILABLE_COLORS } from '../constants/color';
 import { GAME_CONFIG } from '../constants/game-config';
 import { eventEmitter, EVENTS } from '../utils/event-emitter';
+import { RatingManager } from '../utils/rating-manager';
 
 class GameState {
-  #question;
-  #isGameStarted;
-  #score;
-  #timer;
-  #ratingManager;
+  #question: string;
+  #isGameStarted: boolean;
+  #score: number;
+  #timer: { intervalId: number | undefined; seconds: number };
+  #ratingManager: RatingManager;
 
-  constructor({ ratingManager }) {
+  constructor({ ratingManager }: { ratingManager: RatingManager }) {
     this.#ratingManager = ratingManager;
 
     this.#question = AVAILABLE_COLORS[0];
     this.#isGameStarted = false;
     this.#score = 0;
     this.#timer = {
-      intervalId: null,
+      intervalId: undefined,
       seconds: 0,
     };
   }
@@ -61,7 +62,7 @@ class GameState {
     eventEmitter.emit(EVENTS.RATING_UPDATED);
   }
 
-  checkAnswer(answer) {
+  checkAnswer(answer: string) {
     if (!this.#isCorrectAnswer(answer)) {
       eventEmitter.emit(EVENTS.ANSWER_IS_INCORRECT);
       return;
@@ -94,7 +95,7 @@ class GameState {
     clearInterval(this.#timer.intervalId);
   }
 
-  #isCorrectAnswer(answer) {
+  #isCorrectAnswer(answer: string) {
     return this.#question === answer;
   }
 
