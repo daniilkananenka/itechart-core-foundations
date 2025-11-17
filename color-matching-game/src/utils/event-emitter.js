@@ -61,6 +61,8 @@ const EVENTS = Object.freeze({
 
   ANSWER_IS_INCORRECT: 'ANSWER_IS_INCORRECT',
   ANSWER_IS_CORRECT: 'ANSWER_IS_CORRECT',
+
+  RATING_UPDATED: 'RATING_UPDATED',
 });
 
 const eventEmitter = new EventEmitter();

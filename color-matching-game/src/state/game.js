@@ -39,8 +39,8 @@ class GameState {
 
   startGame() {
     this.#isGameStarted = true;
-    this.#score = 0;
 
+    this.#clearScore();
     this.#generateQuestion();
     this.#startTimer();
 
@@ -49,9 +49,12 @@ class GameState {
 
   stopGame() {
     this.#isGameStarted = false;
-    this.#stopTimer();
+    this.#clearTimer();
+
+    this.#ratingManager.update(this.#score);
 
     eventEmitter.emit(EVENTS.GAME_STOPED);
+    eventEmitter.emit(EVENTS.RATING_UPDATED);
   }
 
   checkAnswer(answer) {
@@ -69,7 +72,7 @@ class GameState {
   }
 
   #startTimer() {
-    this.#timer.seconds = GAME_DURATION_SECONDS;
+    this.#timer.seconds = GAME_CONFIG.GAME_DURATION_SECONDS;
     eventEmitter.emit(EVENTS.TIMER_UPDATED);
 
     this.#timer.intervalId = setInterval(() => {
@@ -79,10 +82,10 @@ class GameState {
       if (this.#timer.seconds === 0) {
         this.stopGame();
       }
-    }, TIMER_INTERVAL);
+    }, GAME_CONFIG.TIMER_UPDATE_INTERVAL);
   }
 
-  #stopTimer() {
+  #clearTimer() {
     this.#timer.seconds = 0;
     clearInterval(this.#timer.intervalId);
   }
@@ -91,13 +94,21 @@ class GameState {
     return this.#question === answer;
   }
 
+  #clearScore() {
+    this.#score = 0;
+    eventEmitter.emit(EVENTS.SCORE_UPDATED);
+  }
+
   #incrementScore() {
     ++this.#score;
+    eventEmitter.emit(EVENTS.SCORE_UPDATED);
   }
 
   #generateQuestion() {
     this.#question =
       AVAILABLE_COLORS[Math.floor(Math.random() * AVAILABLE_COLORS.length)];
+
+    eventEmitter.emit(EVENTS.QUESTION_UPDATED);
   }
 }
 
