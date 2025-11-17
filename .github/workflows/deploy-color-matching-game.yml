@@ -38,6 +38,7 @@ jobs:
         with:
           node-version: '22'
           cache: 'pnpm'
+          cache-dependency-path: './color-matching-game/pnpm-lock.yaml'
 
       - name: Install dependencies
         run: pnpm install
