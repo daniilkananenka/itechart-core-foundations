@@ -6,3 +6,5 @@ const COLORS_CONFIG = Object.freeze({
 });
 
 const AVAILABLE_COLORS = Object.keys(COLORS_CONFIG);
+
+export { COLORS_CONFIG, AVAILABLE_COLORS };

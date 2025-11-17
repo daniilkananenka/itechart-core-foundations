@@ -69,3 +69,5 @@ const EVENTS = Object.freeze({
 });
 
 const eventEmitter = new EventEmitter();
+
+export { EVENTS, eventEmitter };

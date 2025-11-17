@@ -1,3 +1,7 @@
+import { AVAILABLE_COLORS, COLORS_CONFIG } from '../constants/color';
+import { createComponentHandler } from '../utils/component';
+import { eventEmitter, EVENTS } from '../utils/event-emitter';
+
 class ColorButtonsComponent {
   #ui;
   #gameState;
@@ -56,3 +60,5 @@ class ColorButtonsComponent {
     });
   }
 }
+
+export { ColorButtonsComponent };

@@ -1,3 +1,12 @@
+import { ColorButtonsComponent } from './components/color-buttons';
+import { ColorQuestionComponent } from './components/color-question';
+import { ControlButtonComponent } from './components/control-button';
+import { RatingListComponent } from './components/rating-list';
+import { ScoreComponent } from './components/score';
+import { TimerComponent } from './components/timer';
+import { GameState } from './state/game';
+import { RatingManager } from './utils/rating-manager';
+
 const ratingManager = new RatingManager();
 const gameState = new GameState({ ratingManager });
 

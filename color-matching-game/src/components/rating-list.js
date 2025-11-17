@@ -1,3 +1,6 @@
+import { createComponentHandler } from '../utils/component';
+import { eventEmitter, EVENTS } from '../utils/event-emitter';
+
 class RatingListComponent {
   #ui;
   #gameState;
@@ -32,3 +35,5 @@ class RatingListComponent {
     }
   }
 }
+
+export { RatingListComponent };

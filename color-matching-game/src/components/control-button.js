@@ -1,3 +1,6 @@
+import { createComponentHandler } from '../utils/component';
+import { eventEmitter, EVENTS } from '../utils/event-emitter';
+
 class ControlButtonComponent {
   #ui;
   #gameState;
@@ -32,3 +35,5 @@ class ControlButtonComponent {
     this.#ui.innerText = text;
   }
 }
+
+export { ControlButtonComponent };

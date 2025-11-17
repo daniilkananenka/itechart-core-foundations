@@ -1,3 +1,6 @@
+import { createComponentHandler } from '../utils/component';
+import { eventEmitter, EVENTS } from '../utils/event-emitter';
+
 class ScoreComponent {
   #ui;
   #gameState;
@@ -19,3 +22,5 @@ class ScoreComponent {
     this.#ui.innerText = text;
   }
 }
+
+export { ScoreComponent };

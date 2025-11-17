@@ -1,3 +1,6 @@
+import { createComponentHandler } from '../utils/component';
+import { eventEmitter, EVENTS } from '../utils/event-emitter';
+
 class ColorQuestionComponent {
   #ui;
   #gameState;
@@ -22,3 +25,5 @@ class ColorQuestionComponent {
     this.#ui.innerText = text;
   }
 }
+
+export { ColorQuestionComponent };

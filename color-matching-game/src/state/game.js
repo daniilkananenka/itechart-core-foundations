@@ -1,3 +1,7 @@
+import { AVAILABLE_COLORS } from '../constants/color';
+import { GAME_CONFIG } from '../constants/game-config';
+import { eventEmitter, EVENTS } from '../utils/event-emitter';
+
 class GameState {
   #question;
   #isGameStarted;
@@ -111,3 +115,5 @@ class GameState {
     eventEmitter.emit(EVENTS.QUESTION_UPDATED);
   }
 }
+
+export { GameState };

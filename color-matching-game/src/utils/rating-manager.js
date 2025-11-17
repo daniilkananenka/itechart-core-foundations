@@ -1,3 +1,5 @@
+import { RATING_CONFIG } from '../constants/rating-config';
+
 class RatingManager {
   /**
    * Returns rating stored in local storage
@@ -52,3 +54,5 @@ class RatingManager {
     return rating.toSorted((a, b) => b - a).slice(0, RATING_CONFIG.MAX_SIZE);
   }
 }
+
+export { RatingManager };

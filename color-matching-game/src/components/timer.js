@@ -1,3 +1,6 @@
+import { createComponentHandler } from '../utils/component';
+import { eventEmitter, EVENTS } from '../utils/event-emitter';
+
 class TimerComponent {
   #ui;
   #gameState;
@@ -19,3 +22,5 @@ class TimerComponent {
     this.#ui.innerText = text;
   }
 }
+
+export { TimerComponent };
