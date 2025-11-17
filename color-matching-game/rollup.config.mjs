@@ -10,7 +10,11 @@ export default {
   plugins: [
     typescript(),
     copy({
-      targets: [{ src: 'src/styles.css', dest: 'dist' }],
+      targets: [
+        { src: 'src/styles.css', dest: 'dist' },
+        { src: 'index.html', dest: 'dist' },
+        { src: 'public/*', dest: 'dist/public' },
+      ],
     }),
   ],
 };
