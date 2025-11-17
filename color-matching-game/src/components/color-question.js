@@ -7,7 +7,7 @@ class ColorQuestionComponent {
   constructor({ gameState }) {
     this.#gameState = gameState;
 
-    this.#ui = document.getElementById('color-name-block');
+    this.#ui = document.getElementById('#color-name-block');
     this.#setInnerText(this.#gameState.question);
 
     eventEmitter.addHandler(
