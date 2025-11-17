@@ -1,36 +1,38 @@
-const { EVENTS, eventEmitter } = require('../utils/event-emitter')
+const { EVENTS, eventEmitter } = require('../utils/event-emitter');
 
 class ControlButtonComponent {
-  #ui
+  #ui;
+  #gameState;
 
-  constructor() {
-    this.#ui = document.getElementById('control-button')
+  constructor({ gameState }) {
+    this.#gameState = gameState;
 
-    eventEmitter.addHandler(EVENTS.APP_INITIALIZED, this.handleInitialize)
-    eventEmitter.addHandler(EVENTS.GAME_STARTED, this.handleStartGame)
-    eventEmitter.addHandler(EVENTS.GAME_STOPED, this.handleStopGame)
-  }
+    this.#ui = document.getElementById('control-button');
 
-  handleInitialize() {
     this.#ui.addEventListener('click', () => {
-      // Add condition of game state
-      eventEmitter.emit(EVENTS.GAME_STARTED)
+      if (!this.#gameState.isGameStarted) {
+        this.#gameState.startGame();
+        return;
+      }
 
-      eventEmitter.emit(EVENTS.GAME_STOPED)
-    })
+      this.#gameState.stopGame();
+    });
+
+    eventEmitter.addHandler(EVENTS.GAME_STARTED, this.handleGameStarted);
+    eventEmitter.addHandler(EVENTS.GAME_STOPED, this.handleGameStoped);
   }
 
-  handleStartGame() {
-    this.#setInnerText('Stop')
+  handleGameStarted() {
+    this.#setInnerText('Stop');
   }
 
-  handleStopGame() {
-    this.#setInnerText('Start')
+  handleGameStoped() {
+    this.#setInnerText('Start');
   }
 
   #setInnerText(text) {
-    this.#ui.innerText(text)
+    this.#ui.innerText(text);
   }
 }
 
-module.exports = { ControlButtonComponent }
+module.exports = { ControlButtonComponent };

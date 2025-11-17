@@ -112,4 +112,4 @@ class GameState {
   }
 }
 
-export { GameState };
+module.exports = { GameState };
