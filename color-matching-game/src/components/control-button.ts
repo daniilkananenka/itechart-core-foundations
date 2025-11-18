@@ -10,7 +10,7 @@ class ControlButtonComponent {
     this.#gameState = gameState;
     this.#ui = getElement('#control-button');
 
-    this.#attachListener();
+    this.#attachListeners();
     this.#render();
 
     eventEmitter.addHandler(EVENTS.GAME_STARTED, this.handleGameStarted);
@@ -29,7 +29,7 @@ class ControlButtonComponent {
     this.#ui.innerText = this.#gameState.isGameStarted ? 'Stop' : 'Start';
   }
 
-  #attachListener() {
+  #attachListeners() {
     this.#ui.addEventListener('click', () => {
       if (!this.#gameState.isGameStarted) {
         this.#gameState.startGame();
