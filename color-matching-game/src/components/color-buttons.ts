@@ -1,7 +1,7 @@
 import { AVAILABLE_COLORS, Color, COLORS_CONFIG } from '../constants/color';
 import { GameState } from '../state/game';
 import { createComponentHandler, getAllElements } from '../utils/component';
-import { eventEmitter, EVENTS } from '../utils/event-emitter';
+import { eventEmitter } from '../utils/event-emitter';
 
 class ColorButtonsComponent {
   readonly #ui: NodeListOf<HTMLButtonElement>;
@@ -14,8 +14,8 @@ class ColorButtonsComponent {
     this.#attachListeners();
     this.#render();
 
-    eventEmitter.addHandler(EVENTS.GAME_STARTED, this.handleGameStarted);
-    eventEmitter.addHandler(EVENTS.GAME_STOPED, this.handleGameStoped);
+    eventEmitter.addHandler('GAME_STARTED', this.handleGameStarted);
+    eventEmitter.addHandler('GAME_STOPED', this.handleGameStoped);
   }
 
   handleGameStarted = createComponentHandler(() => {

@@ -1,6 +1,6 @@
 import { GameState } from '../state/game';
 import { createComponentHandler, getElement } from '../utils/component';
-import { eventEmitter, EVENTS } from '../utils/event-emitter';
+import { eventEmitter } from '../utils/event-emitter';
 
 class RatingListComponent {
   readonly #ui: HTMLDivElement;
@@ -12,7 +12,7 @@ class RatingListComponent {
 
     this.#render();
 
-    eventEmitter.addHandler(EVENTS.RATING_UPDATED, this.handleRatingUpdated);
+    eventEmitter.addHandler('RATING_UPDATED', this.handleRatingUpdated);
   }
 
   handleRatingUpdated = createComponentHandler(() => {

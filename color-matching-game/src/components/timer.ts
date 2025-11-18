@@ -1,6 +1,6 @@
 import { GameState } from '../state/game';
 import { createComponentHandler, getElement } from '../utils/component';
-import { eventEmitter, EVENTS } from '../utils/event-emitter';
+import { eventEmitter } from '../utils/event-emitter';
 
 class TimerComponent {
   readonly #ui: HTMLDivElement;
@@ -12,7 +12,7 @@ class TimerComponent {
 
     this.#render();
 
-    eventEmitter.addHandler(EVENTS.TIMER_UPDATED, this.handleTimerUpdated);
+    eventEmitter.addHandler('TIMER_UPDATED', this.handleTimerUpdated);
   }
 
   handleTimerUpdated = createComponentHandler(() => {

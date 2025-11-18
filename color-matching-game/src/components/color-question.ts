@@ -1,6 +1,6 @@
 import { GameState } from '../state/game';
 import { createComponentHandler, getElement } from '../utils/component';
-import { eventEmitter, EVENTS } from '../utils/event-emitter';
+import { eventEmitter } from '../utils/event-emitter';
 
 class ColorQuestionComponent {
   readonly #ui: HTMLDivElement;
@@ -12,16 +12,10 @@ class ColorQuestionComponent {
 
     this.#render();
 
+    eventEmitter.addHandler('QUESTION_UPDATED', this.handleQuestionUpdated);
+    eventEmitter.addHandler('ANSWER_IS_CORRECT', this.handleAnswerIsCorrect);
     eventEmitter.addHandler(
-      EVENTS.QUESTION_UPDATED,
-      this.handleQuestionUpdated
-    );
-    eventEmitter.addHandler(
-      EVENTS.ANSWER_IS_CORRECT,
-      this.handleAnswerIsCorrect
-    );
-    eventEmitter.addHandler(
-      EVENTS.ANSWER_IS_INCORRECT,
+      'ANSWER_IS_INCORRECT',
       this.handleAnswerIsIncorrect
     );
   }

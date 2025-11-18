@@ -1,6 +1,6 @@
 import { AVAILABLE_COLORS } from '../constants/color';
 import { GAME_CONFIG } from '../constants/game-config';
-import { eventEmitter, EVENTS } from '../utils/event-emitter';
+import { eventEmitter } from '../utils/event-emitter';
 import { RatingManager } from '../utils/rating-manager';
 
 class GameState {
@@ -49,7 +49,7 @@ class GameState {
     this.#generateQuestion();
     this.#startTimer();
 
-    eventEmitter.emit(EVENTS.GAME_STARTED);
+    eventEmitter.emit('GAME_STARTED', undefined);
   }
 
   stopGame() {
@@ -58,31 +58,29 @@ class GameState {
 
     this.#ratingManager.update(this.#score);
 
-    eventEmitter.emit(EVENTS.GAME_STOPED);
-    eventEmitter.emit(EVENTS.RATING_UPDATED);
+    eventEmitter.emit('GAME_STOPED', undefined);
+    eventEmitter.emit('RATING_UPDATED', { rating: this.#ratingManager.get() });
   }
 
   checkAnswer(answer: string) {
     if (!this.#isCorrectAnswer(answer)) {
-      eventEmitter.emit(EVENTS.ANSWER_IS_INCORRECT);
+      eventEmitter.emit('ANSWER_IS_INCORRECT', undefined);
       return;
     }
 
+    eventEmitter.emit('ANSWER_IS_CORRECT', undefined);
+
     this.#incrementScore();
     this.#generateQuestion();
-
-    eventEmitter.emit(EVENTS.ANSWER_IS_CORRECT);
-    eventEmitter.emit(EVENTS.SCORE_UPDATED);
-    eventEmitter.emit(EVENTS.QUESTION_UPDATED);
   }
 
   #startTimer() {
     this.#timer.seconds = GAME_CONFIG.GAME_DURATION_SECONDS;
-    eventEmitter.emit(EVENTS.TIMER_UPDATED);
+    eventEmitter.emit('TIMER_UPDATED', { seconds: this.#timer.seconds });
 
     this.#timer.intervalId = setInterval(() => {
       --this.#timer.seconds;
-      eventEmitter.emit(EVENTS.TIMER_UPDATED);
+      eventEmitter.emit('TIMER_UPDATED', { seconds: this.#timer.seconds });
 
       if (this.#timer.seconds === 0) {
         this.stopGame();
@@ -101,19 +99,19 @@ class GameState {
 
   #clearScore() {
     this.#score = 0;
-    eventEmitter.emit(EVENTS.SCORE_UPDATED);
+    eventEmitter.emit('SCORE_UPDATED', { score: this.#score });
   }
 
   #incrementScore() {
     ++this.#score;
-    eventEmitter.emit(EVENTS.SCORE_UPDATED);
+    eventEmitter.emit('SCORE_UPDATED', { score: this.#score });
   }
 
   #generateQuestion() {
     this.#question =
       AVAILABLE_COLORS[Math.floor(Math.random() * AVAILABLE_COLORS.length)];
 
-    eventEmitter.emit(EVENTS.QUESTION_UPDATED);
+    eventEmitter.emit('QUESTION_UPDATED', { question: this.#question });
   }
 }
 

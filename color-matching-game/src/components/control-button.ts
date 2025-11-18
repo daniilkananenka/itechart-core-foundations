@@ -1,6 +1,6 @@
 import { GameState } from '../state/game';
 import { createComponentHandler, getElement } from '../utils/component';
-import { eventEmitter, EVENTS } from '../utils/event-emitter';
+import { eventEmitter } from '../utils/event-emitter';
 
 class ControlButtonComponent {
   readonly #ui: HTMLButtonElement;
@@ -13,8 +13,8 @@ class ControlButtonComponent {
     this.#attachListeners();
     this.#render();
 
-    eventEmitter.addHandler(EVENTS.GAME_STARTED, this.handleGameStarted);
-    eventEmitter.addHandler(EVENTS.GAME_STOPED, this.handleGameStoped);
+    eventEmitter.addHandler('GAME_STARTED', this.handleGameStarted);
+    eventEmitter.addHandler('GAME_STOPED', this.handleGameStoped);
   }
 
   handleGameStarted = createComponentHandler(() => {

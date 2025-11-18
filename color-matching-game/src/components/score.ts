@@ -1,6 +1,6 @@
 import { GameState } from '../state/game';
 import { createComponentHandler, getElement } from '../utils/component';
-import { eventEmitter, EVENTS } from '../utils/event-emitter';
+import { eventEmitter } from '../utils/event-emitter';
 
 class ScoreComponent {
   readonly #ui: HTMLDivElement;
@@ -12,7 +12,7 @@ class ScoreComponent {
 
     this.#render();
 
-    eventEmitter.addHandler(EVENTS.SCORE_UPDATED, this.handleScoreUpdated);
+    eventEmitter.addHandler('SCORE_UPDATED', this.handleScoreUpdated);
   }
 
   handleScoreUpdated = createComponentHandler(() => {
