@@ -1,6 +1,7 @@
 import { GameState } from '../state/game';
 import { createComponentHandler, getElement } from '../utils/component';
 import { eventEmitter } from '../utils/event-emitter';
+import { formatSeconds } from '../utils/timer';
 
 class TimerComponent {
   readonly #ui: HTMLDivElement;
@@ -20,7 +21,7 @@ class TimerComponent {
   }, this);
 
   #render() {
-    this.#ui.innerText = this.#gameState.remainingTime.toString();
+    this.#ui.innerText = formatSeconds(this.#gameState.remainingTime);
   }
 }
 
