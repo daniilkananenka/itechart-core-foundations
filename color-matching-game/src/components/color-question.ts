@@ -16,10 +16,32 @@ class ColorQuestionComponent {
       EVENTS.QUESTION_UPDATED,
       this.handleQuestionUpdated
     );
+    eventEmitter.addHandler(
+      EVENTS.ANSWER_IS_CORRECT,
+      this.handleAnswerIsCorrect
+    );
+    eventEmitter.addHandler(
+      EVENTS.ANSWER_IS_INCORRECT,
+      this.handleAnswerIsIncorrect
+    );
   }
 
   handleQuestionUpdated = createComponentHandler(() => {
     this.#render();
+  }, this);
+
+  handleAnswerIsCorrect = createComponentHandler(() => {
+    requestAnimationFrame(() => this.#ui.classList.add('correct'));
+    setTimeout(() => {
+      requestAnimationFrame(() => this.#ui.classList.remove('correct'));
+    }, 0.5 * 1000);
+  }, this);
+
+  handleAnswerIsIncorrect = createComponentHandler(() => {
+    requestAnimationFrame(() => this.#ui.classList.add('incorrect'));
+    setTimeout(() => {
+      requestAnimationFrame(() => this.#ui.classList.remove('incorrect'));
+    }, 0.5 * 1000);
   }, this);
 
   #render() {
