@@ -26,17 +26,28 @@ class RatingListComponent {
   #render() {
     const rating = this.#context.ratingState.rating;
 
+    this.#ui.replaceChildren();
+
     if (rating.length) {
-      this.#ui.innerHTML = rating.reduce((html, currentValue, index) => {
-        return (
-          html +
-          `<div class="rating-list-item-block"><div>#${
-            index + 1
-          }</div><div>${currentValue} points</div></div>`
-        );
-      }, '');
+      const fragment = document.createDocumentFragment();
+
+      rating.forEach((currentValue, index) => {
+        const listItemBlock = document.createElement('div');
+        listItemBlock.className = 'rating-list-item-block';
+
+        const indexElement = document.createElement('div');
+        indexElement.textContent = `#${index + 1}`;
+
+        const pointsElement = document.createElement('div');
+        pointsElement.textContent = `${currentValue} points`;
+
+        listItemBlock.append(indexElement, pointsElement);
+        fragment.appendChild(listItemBlock);
+      });
+
+      this.#ui.appendChild(fragment);
     } else {
-      this.#ui.innerHTML = 'No results yet';
+      this.#ui.textContent = 'No results yet';
     }
   }
 }

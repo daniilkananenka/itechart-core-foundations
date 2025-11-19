@@ -46,7 +46,7 @@ class ColorQuestionComponent {
   }, this);
 
   #render() {
-    this.#ui.innerText = this.#context.roundState.question.toString();
+    this.#ui.textContent = this.#context.roundState.question.toString();
   }
 }
 

@@ -1,16 +1,20 @@
 import { AVAILABLE_COLORS, Color, COLORS_CONFIG } from '../constants/color';
 import { Context } from '../state/context';
-import { getAllElements } from '../utils/component';
+import { getElement } from '../utils/component';
 import { createEventHandler } from '../utils/event-emitter';
 
 class ColorButtonsComponent {
-  readonly #ui: NodeListOf<HTMLButtonElement>;
+  readonly #ui: HTMLDivElement;
   readonly #context: Context;
+  #buttons: HTMLButtonElement[];
 
   constructor({ context }: { context: Context }) {
     this.#context = context;
-    this.#ui = getAllElements('.color-selector-button');
 
+    this.#ui = getElement('#color-selectors-grid');
+    this.#buttons = [];
+
+    this.#createButtons();
     this.#attachListeners();
     this.#render();
 
@@ -30,24 +34,41 @@ class ColorButtonsComponent {
   }, this);
 
   #render() {
-    this.#ui.forEach((element, index) => {
+    this.#buttons.forEach((button, index) => {
       const color = AVAILABLE_COLORS[index];
 
-      element.style.backgroundColor = COLORS_CONFIG[color].background;
-      element.style.borderColor = COLORS_CONFIG[color].border;
+      button.style.backgroundColor = COLORS_CONFIG[color].background;
+      button.style.borderColor = COLORS_CONFIG[color].border;
 
-      element.disabled = !this.#context.gameState.isGameStarted;
+      button.disabled = !this.#context.gameState.isGameStarted;
     });
   }
 
   #attachListeners() {
-    this.#ui.forEach((element, index) => {
+    this.#buttons.forEach((element, index) => {
       element.addEventListener('click', () => {
         if (!this.#context.gameState.isGameStarted) return;
 
         this.#context.roundState.checkAnswer(AVAILABLE_COLORS[index]);
       });
     });
+  }
+
+  #createButtons() {
+    this.#ui.replaceChildren();
+    this.#buttons = [];
+
+    const fragment = document.createDocumentFragment();
+
+    AVAILABLE_COLORS.forEach(() => {
+      const button = document.createElement('button');
+      button.className = 'color-selector-button';
+
+      fragment.appendChild(button);
+      this.#buttons.push(button);
+    });
+
+    this.#ui.appendChild(fragment);
   }
 }
 

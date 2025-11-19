@@ -25,7 +25,7 @@ class TimerComponent {
   }, this);
 
   #render() {
-    this.#ui.innerText = formatSeconds(this.#context.timerState.seconds);
+    this.#ui.textContent = formatSeconds(this.#context.timerState.seconds);
   }
 }
 

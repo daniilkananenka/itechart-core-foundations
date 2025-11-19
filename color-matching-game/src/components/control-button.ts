@@ -30,7 +30,7 @@ class ControlButtonComponent {
   }, this);
 
   #render() {
-    this.#ui.innerText = this.#context.gameState.isGameStarted
+    this.#ui.textContent = this.#context.gameState.isGameStarted
       ? 'Stop'
       : 'Start';
   }

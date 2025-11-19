@@ -24,7 +24,7 @@ class ScoreComponent {
   }, this);
 
   #render() {
-    this.#ui.innerText = this.#context.scoreState.score.toString();
+    this.#ui.textContent = this.#context.scoreState.score.toString();
   }
 }
 
