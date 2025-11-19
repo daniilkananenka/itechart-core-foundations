@@ -1,57 +1,48 @@
-class EventEmitter {
-  readonly eventHandlers: Record<string, Set<() => void>>;
+type EventEmitterPayloads = {
+  GAME_STARTED: undefined;
+  GAME_STOPED: undefined;
+
+  TIMER_UPDATED: { seconds: number };
+  TIMER_ENDED: unknown;
+
+  SCORE_UPDATED: { score: number };
+  QUESTION_UPDATED: { question: string };
+
+  ANSWER_IS_INCORRECT: undefined;
+  ANSWER_IS_CORRECT: undefined;
+
+  RATING_UPDATED: { rating: number[] };
+};
+
+class EventEmitter<T extends Record<string, any>> {
+  #eventHandlers: {
+    [K in keyof T]?: Set<(payload: T[K]) => void>;
+  };
 
   constructor() {
-    this.eventHandlers = {};
+    this.#eventHandlers = {};
   }
 
-  addHandler(event: string, handler: () => void) {
-    if (!this.exists(event)) {
-      this.eventHandlers[event] = new Set([handler]);
-      return;
+  addHandler<K extends keyof T>(event: K, handler: (payload: T[K]) => void) {
+    if (!this.#eventHandlers[event]) {
+      this.#eventHandlers[event] = new Set();
     }
-
-    this.eventHandlers[event].add(handler);
+    this.#eventHandlers[event]!.add(handler);
   }
 
-  removeHandler(event: string, handler: () => void) {
-    if (!this.exists(event)) {
-      throw new Error(`There are no handlers associated with ${event} event`);
-    }
-    this.eventHandlers[event].delete(handler);
+  removeHandler<K extends keyof T>(event: K, handler: (payload: T[K]) => void) {
+    this.#eventHandlers[event]?.delete(handler);
   }
 
-  emit(event: string) {
-    if (!this.exists(event)) {
-      return;
-    }
-
-    this.eventHandlers[event].forEach((handler) => {
-      handler?.();
+  emit<K extends keyof T>(event: K, payload: T[K]) {
+    this.#eventHandlers[event]?.forEach((handler) => {
+      handler(payload);
     });
-  }
-
-  private exists(event: string) {
-    return event in this.eventHandlers;
   }
 }
 
-const EVENTS = Object.freeze({
-  APP_INITIALIZED: 'APP_INITIALIZED',
+function createEventHandler(callback: () => void, thisArg: object) {
+  return callback.bind(thisArg);
+}
 
-  GAME_STARTED: 'GAME_STARTED',
-  GAME_STOPED: 'GAME_STOPED',
-
-  TIMER_UPDATED: 'TIMER_UPDATED',
-  SCORE_UPDATED: 'SCORE_UPDATED',
-  QUESTION_UPDATED: 'QUESTION_UPDATED',
-
-  ANSWER_IS_INCORRECT: 'ANSWER_IS_INCORRECT',
-  ANSWER_IS_CORRECT: 'ANSWER_IS_CORRECT',
-
-  RATING_UPDATED: 'RATING_UPDATED',
-});
-
-const eventEmitter = new EventEmitter();
-
-export { EVENTS, eventEmitter };
+export { EventEmitter, EventEmitterPayloads, createEventHandler };

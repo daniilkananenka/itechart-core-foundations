@@ -1,50 +1,74 @@
 import { AVAILABLE_COLORS, Color, COLORS_CONFIG } from '../constants/color';
-import { GameState } from '../state/game';
-import { createComponentHandler, getAllElements } from '../utils/component';
-import { eventEmitter, EVENTS } from '../utils/event-emitter';
+import { Context } from '../state/context';
+import { getElement } from '../utils/component';
+import { createEventHandler } from '../utils/event-emitter';
 
 class ColorButtonsComponent {
-  readonly #ui: NodeListOf<HTMLButtonElement>;
-  readonly #gameState: GameState;
+  readonly #ui: HTMLDivElement;
+  readonly #context: Context;
+  #buttons: HTMLButtonElement[];
 
-  constructor({ gameState }: { gameState: GameState }) {
-    this.#gameState = gameState;
-    this.#ui = getAllElements('.color-selector-button');
+  constructor({ context }: { context: Context }) {
+    this.#context = context;
 
+    this.#ui = getElement('#color-selectors-grid');
+    this.#buttons = [];
+
+    this.#createButtons();
     this.#attachListeners();
     this.#render();
 
-    eventEmitter.addHandler(EVENTS.GAME_STARTED, this.handleGameStarted);
-    eventEmitter.addHandler(EVENTS.GAME_STOPED, this.handleGameStoped);
+    this.#context.eventEmitter.addHandler(
+      'GAME_STARTED',
+      this.handleGameStarted
+    );
+    this.#context.eventEmitter.addHandler('GAME_STOPED', this.handleGameStoped);
   }
 
-  handleGameStarted = createComponentHandler(() => {
+  handleGameStarted = createEventHandler(() => {
     this.#render();
   }, this);
 
-  handleGameStoped = createComponentHandler(() => {
+  handleGameStoped = createEventHandler(() => {
     this.#render();
   }, this);
 
   #render() {
-    this.#ui.forEach((element, index) => {
+    this.#buttons.forEach((button, index) => {
       const color = AVAILABLE_COLORS[index];
 
-      element.style.backgroundColor = COLORS_CONFIG[color].background;
-      element.style.borderColor = COLORS_CONFIG[color].border;
+      button.style.backgroundColor = COLORS_CONFIG[color].background;
+      button.style.borderColor = COLORS_CONFIG[color].border;
 
-      element.disabled = !this.#gameState.isGameStarted;
+      button.disabled = !this.#context.gameState.isGameStarted;
     });
   }
 
   #attachListeners() {
-    this.#ui.forEach((element, index) => {
+    this.#buttons.forEach((element, index) => {
       element.addEventListener('click', () => {
-        if (!this.#gameState.isGameStarted) return;
+        if (!this.#context.gameState.isGameStarted) return;
 
-        this.#gameState.checkAnswer(AVAILABLE_COLORS[index]);
+        this.#context.roundState.checkAnswer(AVAILABLE_COLORS[index]);
       });
     });
+  }
+
+  #createButtons() {
+    this.#ui.replaceChildren();
+    this.#buttons = [];
+
+    const fragment = document.createDocumentFragment();
+
+    AVAILABLE_COLORS.forEach(() => {
+      const button = document.createElement('button');
+      button.className = 'color-selector-button';
+
+      fragment.appendChild(button);
+      this.#buttons.push(button);
+    });
+
+    this.#ui.appendChild(fragment);
   }
 }
 

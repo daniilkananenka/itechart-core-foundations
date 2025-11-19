@@ -1,38 +1,53 @@
+import { Context } from '../state/context';
 import { GameState } from '../state/game';
-import { createComponentHandler, getElement } from '../utils/component';
-import { eventEmitter, EVENTS } from '../utils/event-emitter';
+import { getElement } from '../utils/component';
+import { createEventHandler } from '../utils/event-emitter';
 
 class RatingListComponent {
   readonly #ui: HTMLDivElement;
-  readonly #gameState: GameState;
+  readonly #context: Context;
 
-  constructor({ gameState }: { gameState: GameState }) {
-    this.#gameState = gameState;
+  constructor({ context }: { context: Context }) {
+    this.#context = context;
     this.#ui = getElement('#rating-list');
 
     this.#render();
 
-    eventEmitter.addHandler(EVENTS.RATING_UPDATED, this.handleRatingUpdated);
+    this.#context.eventEmitter.addHandler(
+      'RATING_UPDATED',
+      this.handleRatingUpdated
+    );
   }
 
-  handleRatingUpdated = createComponentHandler(() => {
+  handleRatingUpdated = createEventHandler(() => {
     this.#render();
   }, this);
 
   #render() {
-    const rating = this.#gameState.rating;
+    const rating = this.#context.ratingState.rating;
+
+    this.#ui.replaceChildren();
 
     if (rating.length) {
-      this.#ui.innerHTML = rating.reduce((html, currentValue, index) => {
-        return (
-          html +
-          `<div class="rating-list-item-block"><div>#${
-            index + 1
-          }</div><div>${currentValue} points</div></div>`
-        );
-      }, '');
+      const fragment = document.createDocumentFragment();
+
+      rating.forEach((currentValue, index) => {
+        const listItemBlock = document.createElement('div');
+        listItemBlock.className = 'rating-list-item-block';
+
+        const indexElement = document.createElement('div');
+        indexElement.textContent = `#${index + 1}`;
+
+        const pointsElement = document.createElement('div');
+        pointsElement.textContent = `${currentValue} points`;
+
+        listItemBlock.append(indexElement, pointsElement);
+        fragment.appendChild(listItemBlock);
+      });
+
+      this.#ui.appendChild(fragment);
     } else {
-      this.#ui.innerHTML = 'No results yet';
+      this.#ui.textContent = 'No results yet';
     }
   }
 }

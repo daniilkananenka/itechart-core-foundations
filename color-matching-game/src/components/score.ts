@@ -1,26 +1,30 @@
+import { Context } from '../state/context';
 import { GameState } from '../state/game';
-import { createComponentHandler, getElement } from '../utils/component';
-import { eventEmitter, EVENTS } from '../utils/event-emitter';
+import { getElement } from '../utils/component';
+import { createEventHandler } from '../utils/event-emitter';
 
 class ScoreComponent {
   readonly #ui: HTMLDivElement;
-  readonly #gameState: GameState;
+  readonly #context: Context;
 
-  constructor({ gameState }: { gameState: GameState }) {
-    this.#gameState = gameState;
+  constructor({ context }: { context: Context }) {
+    this.#context = context;
     this.#ui = getElement('#score-block');
 
     this.#render();
 
-    eventEmitter.addHandler(EVENTS.SCORE_UPDATED, this.handleScoreUpdated);
+    this.#context.eventEmitter.addHandler(
+      'SCORE_UPDATED',
+      this.handleScoreUpdated
+    );
   }
 
-  handleScoreUpdated = createComponentHandler(() => {
+  handleScoreUpdated = createEventHandler(() => {
     this.#render();
   }, this);
 
   #render() {
-    this.#ui.innerText = this.#gameState.score.toString();
+    this.#ui.textContent = this.#context.scoreState.score.toString();
   }
 }
 

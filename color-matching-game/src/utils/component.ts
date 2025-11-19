@@ -1,7 +1,3 @@
-function createComponentHandler(callback: () => void, thisArg: object) {
-  return callback.bind(thisArg);
-}
-
 function getElement<T extends Element>(selector: string): T {
   const element = document.querySelector<T>(selector);
 
@@ -20,4 +16,4 @@ function getAllElements<T extends Element>(selector: string): NodeListOf<T> {
   return element;
 }
 
-export { createComponentHandler, getElement, getAllElements };
+export { getElement, getAllElements };
