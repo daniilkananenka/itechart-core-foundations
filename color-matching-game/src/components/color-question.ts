@@ -1,37 +1,44 @@
+import { Context } from '../state/context';
 import { GameState } from '../state/game';
-import { createComponentHandler, getElement } from '../utils/component';
-import { eventEmitter } from '../utils/event-emitter';
+import { getElement } from '../utils/component';
+import { createEventHandler } from '../utils/event-emitter';
 
 class ColorQuestionComponent {
   readonly #ui: HTMLDivElement;
-  readonly #gameState: GameState;
+  readonly #context: Context;
 
-  constructor({ gameState }: { gameState: GameState }) {
-    this.#gameState = gameState;
+  constructor({ context }: { context: Context }) {
+    this.#context = context;
     this.#ui = getElement('#color-name-block');
 
     this.#render();
 
-    eventEmitter.addHandler('QUESTION_UPDATED', this.handleQuestionUpdated);
-    eventEmitter.addHandler('ANSWER_IS_CORRECT', this.handleAnswerIsCorrect);
-    eventEmitter.addHandler(
+    this.#context.eventEmitter.addHandler(
+      'QUESTION_UPDATED',
+      this.handleQuestionUpdated
+    );
+    this.#context.eventEmitter.addHandler(
+      'ANSWER_IS_CORRECT',
+      this.handleAnswerIsCorrect
+    );
+    this.#context.eventEmitter.addHandler(
       'ANSWER_IS_INCORRECT',
       this.handleAnswerIsIncorrect
     );
   }
 
-  handleQuestionUpdated = createComponentHandler(() => {
+  handleQuestionUpdated = createEventHandler(() => {
     this.#render();
   }, this);
 
-  handleAnswerIsCorrect = createComponentHandler(() => {
+  handleAnswerIsCorrect = createEventHandler(() => {
     requestAnimationFrame(() => this.#ui.classList.add('correct'));
     setTimeout(() => {
       requestAnimationFrame(() => this.#ui.classList.remove('correct'));
     }, 0.5 * 1000);
   }, this);
 
-  handleAnswerIsIncorrect = createComponentHandler(() => {
+  handleAnswerIsIncorrect = createEventHandler(() => {
     requestAnimationFrame(() => this.#ui.classList.add('incorrect'));
     setTimeout(() => {
       requestAnimationFrame(() => this.#ui.classList.remove('incorrect'));
@@ -39,7 +46,7 @@ class ColorQuestionComponent {
   }, this);
 
   #render() {
-    this.#ui.innerText = this.#gameState.question.toString();
+    this.#ui.innerText = this.#context.roundState.question.toString();
   }
 }
 

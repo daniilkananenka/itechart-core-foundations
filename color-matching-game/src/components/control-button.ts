@@ -1,42 +1,48 @@
+import { Context } from '../state/context';
 import { GameState } from '../state/game';
-import { createComponentHandler, getElement } from '../utils/component';
-import { eventEmitter } from '../utils/event-emitter';
+import { getElement } from '../utils/component';
+import { createEventHandler } from '../utils/event-emitter';
 
 class ControlButtonComponent {
   readonly #ui: HTMLButtonElement;
-  readonly #gameState: GameState;
+  readonly #context: Context;
 
-  constructor({ gameState }: { gameState: GameState }) {
-    this.#gameState = gameState;
+  constructor({ context }: { context: Context }) {
+    this.#context = context;
     this.#ui = getElement('#control-button');
 
     this.#attachListeners();
     this.#render();
 
-    eventEmitter.addHandler('GAME_STARTED', this.handleGameStarted);
-    eventEmitter.addHandler('GAME_STOPED', this.handleGameStoped);
+    this.#context.eventEmitter.addHandler(
+      'GAME_STARTED',
+      this.handleGameStarted
+    );
+    this.#context.eventEmitter.addHandler('GAME_STOPED', this.handleGameStoped);
   }
 
-  handleGameStarted = createComponentHandler(() => {
+  handleGameStarted = createEventHandler(() => {
     this.#render();
   }, this);
 
-  handleGameStoped = createComponentHandler(() => {
+  handleGameStoped = createEventHandler(() => {
     this.#render();
   }, this);
 
   #render() {
-    this.#ui.innerText = this.#gameState.isGameStarted ? 'Stop' : 'Start';
+    this.#ui.innerText = this.#context.gameState.isGameStarted
+      ? 'Stop'
+      : 'Start';
   }
 
   #attachListeners() {
     this.#ui.addEventListener('click', () => {
-      if (!this.#gameState.isGameStarted) {
-        this.#gameState.startGame();
+      if (!this.#context.gameState.isGameStarted) {
+        this.#context.gameState.startGame();
         return;
       }
 
-      this.#gameState.stopGame();
+      this.#context.gameState.stopGame();
     });
   }
 }

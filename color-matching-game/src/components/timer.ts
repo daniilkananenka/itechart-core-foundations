@@ -1,27 +1,31 @@
+import { Context } from '../state/context';
 import { GameState } from '../state/game';
-import { createComponentHandler, getElement } from '../utils/component';
-import { eventEmitter } from '../utils/event-emitter';
+import { getElement } from '../utils/component';
+import { createEventHandler } from '../utils/event-emitter';
 import { formatSeconds } from '../utils/timer';
 
 class TimerComponent {
   readonly #ui: HTMLDivElement;
-  readonly #gameState: GameState;
+  readonly #context: Context;
 
-  constructor({ gameState }: { gameState: GameState }) {
-    this.#gameState = gameState;
+  constructor({ context }: { context: Context }) {
+    this.#context = context;
     this.#ui = getElement('#timer-block');
 
     this.#render();
 
-    eventEmitter.addHandler('TIMER_UPDATED', this.handleTimerUpdated);
+    this.#context.eventEmitter.addHandler(
+      'TIMER_UPDATED',
+      this.handleTimerUpdated
+    );
   }
 
-  handleTimerUpdated = createComponentHandler(() => {
+  handleTimerUpdated = createEventHandler(() => {
     this.#render();
   }, this);
 
   #render() {
-    this.#ui.innerText = formatSeconds(this.#gameState.remainingTime);
+    this.#ui.innerText = formatSeconds(this.#context.timerState.seconds);
   }
 }
 

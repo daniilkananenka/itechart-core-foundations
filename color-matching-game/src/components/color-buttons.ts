@@ -1,28 +1,31 @@
 import { AVAILABLE_COLORS, Color, COLORS_CONFIG } from '../constants/color';
-import { GameState } from '../state/game';
-import { createComponentHandler, getAllElements } from '../utils/component';
-import { eventEmitter } from '../utils/event-emitter';
+import { Context } from '../state/context';
+import { getAllElements } from '../utils/component';
+import { createEventHandler } from '../utils/event-emitter';
 
 class ColorButtonsComponent {
   readonly #ui: NodeListOf<HTMLButtonElement>;
-  readonly #gameState: GameState;
+  readonly #context: Context;
 
-  constructor({ gameState }: { gameState: GameState }) {
-    this.#gameState = gameState;
+  constructor({ context }: { context: Context }) {
+    this.#context = context;
     this.#ui = getAllElements('.color-selector-button');
 
     this.#attachListeners();
     this.#render();
 
-    eventEmitter.addHandler('GAME_STARTED', this.handleGameStarted);
-    eventEmitter.addHandler('GAME_STOPED', this.handleGameStoped);
+    this.#context.eventEmitter.addHandler(
+      'GAME_STARTED',
+      this.handleGameStarted
+    );
+    this.#context.eventEmitter.addHandler('GAME_STOPED', this.handleGameStoped);
   }
 
-  handleGameStarted = createComponentHandler(() => {
+  handleGameStarted = createEventHandler(() => {
     this.#render();
   }, this);
 
-  handleGameStoped = createComponentHandler(() => {
+  handleGameStoped = createEventHandler(() => {
     this.#render();
   }, this);
 
@@ -33,16 +36,16 @@ class ColorButtonsComponent {
       element.style.backgroundColor = COLORS_CONFIG[color].background;
       element.style.borderColor = COLORS_CONFIG[color].border;
 
-      element.disabled = !this.#gameState.isGameStarted;
+      element.disabled = !this.#context.gameState.isGameStarted;
     });
   }
 
   #attachListeners() {
     this.#ui.forEach((element, index) => {
       element.addEventListener('click', () => {
-        if (!this.#gameState.isGameStarted) return;
+        if (!this.#context.gameState.isGameStarted) return;
 
-        this.#gameState.checkAnswer(AVAILABLE_COLORS[index]);
+        this.#context.roundState.checkAnswer(AVAILABLE_COLORS[index]);
       });
     });
   }

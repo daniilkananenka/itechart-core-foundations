@@ -3,6 +3,8 @@ type EventEmitterPayloads = {
   GAME_STOPED: undefined;
 
   TIMER_UPDATED: { seconds: number };
+  TIMER_ENDED: unknown;
+
   SCORE_UPDATED: { score: number };
   QUESTION_UPDATED: { question: string };
 
@@ -39,6 +41,8 @@ class EventEmitter<T extends Record<string, any>> {
   }
 }
 
-const eventEmitter = new EventEmitter<EventEmitterPayloads>();
+function createEventHandler(callback: () => void, thisArg: object) {
+  return callback.bind(thisArg);
+}
 
-export { eventEmitter };
+export { EventEmitter, EventEmitterPayloads, createEventHandler };

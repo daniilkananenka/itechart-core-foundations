@@ -1,26 +1,30 @@
+import { Context } from '../state/context';
 import { GameState } from '../state/game';
-import { createComponentHandler, getElement } from '../utils/component';
-import { eventEmitter } from '../utils/event-emitter';
+import { getElement } from '../utils/component';
+import { createEventHandler } from '../utils/event-emitter';
 
 class RatingListComponent {
   readonly #ui: HTMLDivElement;
-  readonly #gameState: GameState;
+  readonly #context: Context;
 
-  constructor({ gameState }: { gameState: GameState }) {
-    this.#gameState = gameState;
+  constructor({ context }: { context: Context }) {
+    this.#context = context;
     this.#ui = getElement('#rating-list');
 
     this.#render();
 
-    eventEmitter.addHandler('RATING_UPDATED', this.handleRatingUpdated);
+    this.#context.eventEmitter.addHandler(
+      'RATING_UPDATED',
+      this.handleRatingUpdated
+    );
   }
 
-  handleRatingUpdated = createComponentHandler(() => {
+  handleRatingUpdated = createEventHandler(() => {
     this.#render();
   }, this);
 
   #render() {
-    const rating = this.#gameState.rating;
+    const rating = this.#context.ratingState.rating;
 
     if (rating.length) {
       this.#ui.innerHTML = rating.reduce((html, currentValue, index) => {
