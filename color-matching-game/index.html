@@ -3,11 +3,38 @@
   <head>
     <title>Color Game</title>
     <meta name="viewport" content="width=device-width, user-scalable=no" />
-    <link rel="stylesheet" href="./src/styles.css" />
+    <link rel="stylesheet" href="./styles.css" />
     <link rel="icon" type="image/svg+xml" href="./public/favicon.svg" />
   </head>
   <body>
-    <h1>Color Game</h1>
-    <script src="./src/main.js"></script>
+    <div id="main-block">
+      <div id="metrics-block">
+        <div class="metrics-item-block">
+          <div class="metrics-item-label">Timer</div>
+          <div class="metrics-item-value-block" id="timer-block">00:00</div>
+        </div>
+        <div class="metrics-item-block">
+          <div class="metrics-item-label">Score</div>
+          <div class="metrics-item-value-block" id="score-block">0</div>
+        </div>
+      </div>
+
+      <div id="game-block">
+        <div id="color-name-block">Blue</div>
+
+        <div id="color-selectors-grid"></div>
+      </div>
+
+      <div id="controls-block">
+        <button id="control-button">Start</button>
+      </div>
+
+      <div id="rating-block">
+        <div id="rating-heading">Top Results</div>
+        <div id="rating-list"></div>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
   </body>
 </html>
